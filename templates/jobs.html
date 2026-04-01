@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Jobs - Job Application Tracker{% endblock %}
+
+{% block content %}
+<h1>Jobs</h1>
+<a href="{{ url_for('add_job') }}" class="btn btn-primary">Add Job</a>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Job Title</th>
+            <th>Company</th>
+            <th>Type</th>
+            <th>Salary Range</th>
+            <th>Posted Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for job in jobs %}
+        <tr>
+            <td>{{ job.job_title }}</td>
+            <td>{{ job.company_name or 'N/A' }}</td>
+            <td>{{ job.job_type or 'N/A' }}</td>
+            <td>
+                {% if job.salary_min and job.salary_max %}
+                ${{ job.salary_min }} - ${{ job.salary_max }}
+                {% elif job.salary_min %}
+                ${{ job.salary_min }}+
+                {% else %}
+                N/A
+                {% endif %}
+            </td>
+            <td>{{ job.date_posted or 'N/A' }}</td>
+            <td>
+                <a href="{{ url_for('edit_job', id=job.job_id) }}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{{ url_for('delete_job', id=job.job_id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="6">No jobs found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

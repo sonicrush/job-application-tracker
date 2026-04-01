@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}{% if application %}Edit Application{% else %}Add Application{% endif %} - Job Application Tracker{% endblock %}
+
+{% block content %}
+<h1>{% if application %}Edit Application{% else %}Add Application{% endif %}</h1>
+
+<form method="post" class="form">
+    <div class="form-group">
+        <label for="job_id">Job *</label>
+        <select id="job_id" name="job_id" required>
+            <option value="">-- Select Job --</option>
+            {% for job in jobs %}
+            <option value="{{ job.job_id }}" {% if application and application.job_id == job.job_id %}selected{% endif %}>{{ job.job_title }} - {{ job.company_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="application_date">Application Date *</label>
+        <input type="date" id="application_date" name="application_date" required value="{{ application.application_date if application else '' }}">
+    </div>
+
+    <div class="form-group">
+        <label for="status">Status</label>
+        <select id="status" name="status">
+            <option value="Applied" {% if application and application.status == 'Applied' %}selected{% endif %}>Applied</option>
+            <option value="Screening" {% if application and application.status == 'Screening' %}selected{% endif %}>Screening</option>
+            <option value="Interview" {% if application and application.status == 'Interview' %}selected{% endif %}>Interview</option>
+            <option value="Offer" {% if application and application.status == 'Offer' %}selected{% endif %}>Offer</option>
+            <option value="Rejected" {% if application and application.status == 'Rejected' %}selected{% endif %}>Rejected</option>
+            <option value="Withdrawn" {% if application and application.status == 'Withdrawn' %}selected{% endif %}>Withdrawn</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="resume_version">Resume Version</label>
+        <input type="text" id="resume_version" name="resume_version" value="{{ application.resume_version if application else '' }}">
+    </div>
+
+    <div class="form-group">
+        <label for="cover_letter_sent">Cover Letter Sent</label>
+        <input type="checkbox" id="cover_letter_sent" name="cover_letter_sent" {% if application and application.cover_letter_sent %}checked{% endif %}>
+    </div>
+
+    <div class="form-group">
+        <label for="interview_data">Interview Data (JSON)</label>
+        <textarea id="interview_data" name="interview_data">{% if application and application.interview_data %}{{ application.interview_data }}{% else %}{}{% endif %}</textarea>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{% if application %}Update{% else %}Add{% endif %} Application</button>
+        <a href="{{ url_for('applications') }}" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+{% endblock %}

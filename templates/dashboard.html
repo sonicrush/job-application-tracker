@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Job Application Tracker{% endblock %}
+
+{% block content %}
+<h1>Dashboard</h1>
+<div class="dashboard-container">
+    <div class="stat-card">
+        <h2>Applications</h2>
+        <div class="stat-value">{{ stats.applications.total }}</div>
+        <details>
+            <summary>Details</summary>
+            <div class="stat-details">
+                <ul>
+                    {% for status, count in stats.applications.by_status.items() %}
+                    <li>{{ status }}: {{ count }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </details>
+    </div>
+
+    <div class="stat-card">
+        <h2>Contacts</h2>
+        <div class="stat-value">{{ stats.contacts.total }}</div>
+        <details>
+            <summary>Details</summary>
+            <div class="stat-details">
+                <ul>
+                    <li>With Email: {{ stats.contacts.with_email }}</li>
+                    <li>With Phone: {{ stats.contacts.with_phone }}</li>
+                    <li>With LinkedIn: {{ stats.contacts.with_linkedin }}</li>
+                </ul>
+            </div>
+        </details>
+    </div>
+
+    <div class="stat-card">
+        <h2>Jobs</h2>
+        <div class="stat-value">{{ stats.jobs.total }}</div>
+        <details>
+            <summary>Details</summary>
+            <div class="stat-details">
+                <ul>
+                    {% for job_type, count in stats.jobs.by_type.items() %}
+                    <li>{{ job_type }}: {{ count }}</li>
+                    {% endfor %}
+                    {% if stats.jobs.salary.min_salary %}
+                    <li>Min Salary: ${{ stats.jobs.salary.min_salary }}</li>
+                    <li>Max Salary: ${{ stats.jobs.salary.max_salary }}</li>
+                    <li>Avg Salary: ${{ "%.2f"|format(stats.jobs.salary.avg_salary) }}</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </details>
+    </div>
+
+    <div class="stat-card">
+        <h2>Companies</h2>
+        <div class="stat-value">{{ stats.companies.total }}</div>
+        <details>
+            <summary>Details</summary>
+            <div class="stat-details">
+                <ul>
+                    <li>With Website: {{ stats.companies.with_website }}</li>
+                    {% if stats.companies.industries %}
+                    <li>Industries:
+                        <ul>
+                            {% for industry in stats.companies.industries %}
+                            <li>{{ industry }}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </details>
+    </div>
+</div>
+{% endblock %}

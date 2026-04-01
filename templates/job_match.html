@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Job Match - Job Application Tracker{% endblock %}
+
+{% block content %}
+<h1>Job Match</h1>
+<p>Enter your skills (comma-separated) to find matching jobs based on skill requirements.</p>
+
+<form method="get" class="search-form">
+    <input type="text" name="search" placeholder="e.g., Python, JavaScript, React" value="{{ search_query }}" class="form-input">
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+{% if jobs %}
+<div class="job-match-results">
+    {% for job in jobs %}
+    <div class="job-match-card">
+        <div class="job-match-header">
+            <h3>{{ job.job_title }}</h3>
+            <span class="match-percentage">{{ job.match_percentage }}% Match</span>
+        </div>
+        <p><strong>Job ID:</strong> {{ job.job_id }}</p>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: {{ job.match_percentage }}%"></div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% elif search_query %}
+<p>No matching jobs found for your skills.</p>
+{% endif %}
+{% endblock %}

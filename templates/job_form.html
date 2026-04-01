@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}{% if job %}Edit Job{% else %}Add Job{% endif %} - Job Application Tracker{% endblock %}
+
+{% block content %}
+<h1>{% if job %}Edit Job{% else %}Add Job{% endif %}</h1>
+
+<form method="post" class="form">
+    <div class="form-group">
+        <label for="company_id">Company</label>
+        <select id="company_id" name="company_id">
+            <option value="">-- Select Company --</option>
+            {% for company in companies %}
+            <option value="{{ company.company_id }}" {% if job and job.company_id == company.company_id %}selected{% endif %}>{{ company.company_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="job_title">Job Title *</label>
+        <input type="text" id="job_title" name="job_title" required value="{{ job.job_title if job else '' }}">
+    </div>
+
+    <div class="form-group">
+        <label for="job_type">Job Type</label>
+        <select id="job_type" name="job_type">
+            <option value="">-- Select Type --</option>
+            <option value="Full-time" {% if job and job.job_type == 'Full-time' %}selected{% endif %}>Full-time</option>
+            <option value="Part-time" {% if job and job.job_type == 'Part-time' %}selected{% endif %}>Part-time</option>
+            <option value="Contract" {% if job and job.job_type == 'Contract' %}selected{% endif %}>Contract</option>
+            <option value="Internship" {% if job and job.job_type == 'Internship' %}selected{% endif %}>Internship</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="salary_min">Minimum Salary</label>
+        <input type="number" id="salary_min" name="salary_min" value="{{ job.salary_min if job else '' }}">
+    </div>
+
+    <div class="form-group">
+        <label for="salary_max">Maximum Salary</label>
+        <input type="number" id="salary_max" name="salary_max" value="{{ job.salary_max if job else '' }}">
+    </div>
+
+    <div class="form-group">
+        <label for="job_url">Job URL</label>
+        <input type="url" id="job_url" name="job_url" value="{{ job.job_url if job else '' }}">
+    </div>
+
+    <div class="form-group">
+        <label for="date_posted">Date Posted</label>
+        <input type="date" id="date_posted" name="date_posted" value="{{ job.date_posted if job else '' }}">
+    </div>
+
+    <div class="form-group">
+        <label for="requirements">Requirements (JSON array)</label>
+        <textarea id="requirements" name="requirements">{% if job and job.requirements %}{{ job.requirements }}{% else %}[]{% endif %}</textarea>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{% if job %}Update{% else %}Add{% endif %} Job</button>
+        <a href="{{ url_for('jobs') }}" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+{% endblock %}

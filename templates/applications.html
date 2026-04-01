@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Applications - Job Application Tracker{% endblock %}
+
+{% block content %}
+<h1>Applications</h1>
+<a href="{{ url_for('add_application') }}" class="btn btn-primary">Add Application</a>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Job Title</th>
+            <th>Company</th>
+            <th>Status</th>
+            <th>Application Date</th>
+            <th>Resume Version</th>
+            <th>Cover Letter</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for app in applications %}
+        <tr>
+            <td>{{ app.job_title or 'N/A' }}</td>
+            <td>{{ app.company_name or 'N/A' }}</td>
+            <td><span class="status-badge status-{{ app.status|lower|replace('-', '') }}">{{ app.status }}</span></td>
+            <td>{{ app.application_date }}</td>
+            <td>{{ app.resume_version or 'N/A' }}</td>
+            <td>{% if app.cover_letter_sent %}Yes{% else %}No{% endif %}</td>
+            <td>
+                <a href="{{ url_for('edit_application', id=app.application_id) }}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{{ url_for('delete_application', id=app.application_id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="7">No applications found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
