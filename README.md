@@ -1,3 +1,6 @@
+# Video
+Youtube video showcasing the application<br>
+https://www.youtube.com/watch?v=wrtQpy3OKOM
 # Technical Requirements
 This project was tested on Python3.14<br>
 Ensure you run the following command before running the application:<br>
