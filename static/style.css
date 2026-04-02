@@ -296,6 +296,15 @@ h3 {
     text-decoration: underline;
 }
 
+.data-table .btn {
+    color: white;
+    text-decoration: none;
+}
+
+.data-table .btn:hover {
+    text-decoration: none;
+}
+
 /* Status Badges */
 .status-badge {
     display: inline-block;
