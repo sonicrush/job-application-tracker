@@ -166,10 +166,9 @@ def add_job():
     cursor = conn.cursor(dictionary=True)
 
     if request.method == 'POST':
-        try:
-            requirements = json.loads(request.form.get('requirements', '[]'))
-        except:
-            requirements = []
+        # Parse comma-separated requirements into a list
+        requirements_str = request.form.get('requirements', '').strip()
+        requirements = [req.strip() for req in requirements_str.split(',') if req.strip()] if requirements_str else []
 
         cursor.execute('''
             INSERT INTO jobs (company_id, job_title, job_type, salary_min,
@@ -197,10 +196,9 @@ def edit_job(id):
     cursor = conn.cursor(dictionary=True)
 
     if request.method == 'POST':
-        try:
-            requirements = json.loads(request.form.get('requirements', '[]'))
-        except:
-            requirements = []
+        # Parse comma-separated requirements into a list
+        requirements_str = request.form.get('requirements', '').strip()
+        requirements = [req.strip() for req in requirements_str.split(',') if req.strip()] if requirements_str else []
 
         cursor.execute('''
             UPDATE jobs SET company_id=%s, job_title=%s, job_type=%s,
@@ -218,6 +216,13 @@ def edit_job(id):
 
     cursor.execute('SELECT * FROM jobs WHERE job_id=%s', (id,))
     job = cursor.fetchone()
+    # Convert JSON requirements to comma-separated string for display
+    if job and job['requirements']:
+        try:
+            reqs = json.loads(job['requirements'])
+            job['requirements_display'] = ', '.join(reqs) if isinstance(reqs, list) else ''
+        except:
+            job['requirements_display'] = ''
     cursor.execute('SELECT * FROM companies')
     companies_list = cursor.fetchall()
     conn.close()
