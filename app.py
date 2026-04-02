@@ -259,9 +259,15 @@ def add_application():
     cursor = conn.cursor(dictionary=True)
 
     if request.method == 'POST':
-        try:
-            interview_data = json.loads(request.form.get('interview_data', '{}'))
-        except:
+        interview_input = request.form.get('interview_data', '').strip()
+
+        if interview_input:
+            try:
+                interview_data = json.loads(interview_input)
+            except:
+                # If JSON parsing fails, wrap the input as a note
+                interview_data = {"notes": interview_input}
+        else:
             interview_data = {}
 
         cursor.execute('''
@@ -282,6 +288,7 @@ def add_application():
     ''')
     jobs_list = cursor.fetchall()
     conn.close()
+    # Prepare empty interview_data display for new applications
     return render_template('application_form.html', jobs=jobs_list)
 
 @app.route('/applications/<int:id>/edit', methods=['GET', 'POST'])
@@ -291,9 +298,15 @@ def edit_application(id):
     cursor = conn.cursor(dictionary=True)
 
     if request.method == 'POST':
-        try:
-            interview_data = json.loads(request.form.get('interview_data', '{}'))
-        except:
+        interview_input = request.form.get('interview_data', '').strip()
+
+        if interview_input:
+            try:
+                interview_data = json.loads(interview_input)
+            except:
+                # If JSON parsing fails, wrap the input as a note
+                interview_data = {"notes": interview_input}
+        else:
             interview_data = {}
 
         cursor.execute('''
@@ -310,6 +323,15 @@ def edit_application(id):
 
     cursor.execute('SELECT * FROM applications WHERE application_id=%s', (id,))
     application = cursor.fetchone()
+    # Format interview_data JSON for display
+    if application and application['interview_data']:
+        try:
+            interview_obj = json.loads(application['interview_data'])
+            application['interview_data_display'] = json.dumps(interview_obj, indent=2)
+        except:
+            application['interview_data_display'] = '{}'
+    else:
+        application['interview_data_display'] = '{}'
     cursor.execute('''
         SELECT j.job_id, j.job_title, c.company_name FROM jobs j
         LEFT JOIN companies c ON j.company_id = c.company_id
