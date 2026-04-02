@@ -1,3 +1,23 @@
+# Technical Requirements
+This project was tested on Python3.14<br>
+Ensure you run the following command before running the application:<br>
+pip install -r requirements.txt<br>
+<br>
+Ensure you create a .env file within the roof folder and include the following fields:<br>
+DATABASE_PASSWORD =<br> 
+DB_HOST = <br>
+DB_USER = <br>
+DB_NAME = <br>
+
+Defaults are usually:<br>
+DATABASE_PASSWORD = There are no default passwords!<br>
+DB_HOST = localhost<br>
+DB_USER = root<br>
+DB_NAME = job_tracker<br>
+<br>
+Afterwards, run the application with the following command:<br>
+py app.py
+
 # Design Overview
 
 ## Dashboard Page
@@ -10,7 +30,7 @@ Total number of applications, total number of applications under specific a stat
 Total number of contacts, contacts with emails, contacts with phone numbers, contacts with linkedin's
 
 #### Jobs
-Total Jobs, total jobs within type categories (Full time, Part-time, Contract, Internship), Minimum, Maximum, and average salary of all jobs.
+Total Jobs, total jobs within type categories (Full time, Part-time, Contract, Internship)
 
 #### Companies
 Total Companies, Total websites, List of all industries
