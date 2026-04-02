@@ -19,7 +19,8 @@
             <h3>{{ job.job_title }}</h3>
             <span class="match-percentage">{{ job.match_percentage }}% Match</span>
         </div>
-        <p><strong>Job ID:</strong> {{ job.job_id }}</p>
+        <p><strong>Company:</strong> {{ job.company_name or 'N/A' }}</p>
+        <p><strong>Type:</strong> {{ job.job_type or 'N/A' }}</p>
         <div class="progress-bar">
             <div class="progress-fill" style="width: {{ job.match_percentage }}%"></div>
         </div>

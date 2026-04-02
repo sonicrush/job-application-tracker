@@ -433,7 +433,10 @@ def job_match():
 
     if search_query:
         # Get all jobs and match based on skills
-        cursor.execute('SELECT * FROM jobs')
+        cursor.execute('''
+            SELECT j.*, c.company_name FROM jobs j
+            LEFT JOIN companies c ON j.company_id = c.company_id
+        ''')
         jobs_list = cursor.fetchall()
 
         search_skills = set(s.strip().lower() for s in search_query.split(','))
